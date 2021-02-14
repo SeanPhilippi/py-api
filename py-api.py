@@ -1,6 +1,7 @@
 import requests
 import json
 from difflib import SequenceMatcher
+import operator
 
 # 1. Removing irrelevant results
 # 2. Sorting the results such that:
@@ -24,15 +25,15 @@ search_results = []
 # search whole name matches, if term found in a whole name, put in front
 # if name includes a space, include is results to be sorted
 # sort by highest to lowest, result of similar(name)    
-
+filtered_results = list(filter(lambda x: x['name'].find(' ') != -1, results))
+print('filtered results', filtered_results)
+for i, item in enumerate(filtered_results):
+    item['ratio'] = similar(item['name'], term)
+print('filtered results with ratio', filtered_results)
+sorted_results = sorted(filtered_results, key=lambda x: x['ratio'], reverse=True)
+print('sorted results', sorted_results)
 
 # search email addresses, prioritize next
-emails = list(map(lambda x: x['email'], results))
-print('emails', emails)
-# match_matrix = {}
-# for email in emails:
-#    percent_match = similar(email, term)
-#    match_matrix[term] = percent_match
 
 
 # search incomplete names, append to the end of results
