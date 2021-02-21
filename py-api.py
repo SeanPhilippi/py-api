@@ -1,6 +1,4 @@
 import requests
-import json
-import operator
 
 # 1. Removing irrelevant results
 # 2. Sorting the results such that:
@@ -16,10 +14,9 @@ import operator
 # next partial name matches
 # print list of names appended together
 
-term = input('Enter a search term: ').lower()
+term = input('Search for a name: ').lower()
 res = requests.get(f'http://127.0.0.1:8080/?search={term}')
 results = res.json()
-print('results', json.dumps(results, indent=2))
 
 search_results = []
 
@@ -36,5 +33,9 @@ for result in results:
 for result in results:
     if term in result['name'].lower():
         search_results.append(result)
-
-print('search_results', json.dumps(search_results, indent=2))
+if len(results):
+    print('Here are your results:')
+    for result in search_results:
+        print(result)
+else:
+    print(f'No results found for {term}')
